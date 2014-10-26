@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <!--The viewport meta tag is used to improve the presentation and behavior of the samples
+  on iOS devices-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+  <title>Olary Project</title>
+
+  <link rel="stylesheet" href="http://js.arcgis.com/3.11/dijit/themes/claro/claro.css">
+  <link rel="stylesheet" href="http://js.arcgis.com/3.11/esri/css/esri.css">
+
+  <style>
+    html, body {
+      height: 97%;
+      width: 98%;
+      margin: 1%;
+    }
+
+    #rightPane {
+      width: 20%;
+    }
+
+    #legendPane {
+      border: solid #97DCF2 1px;
+    }
+  </style>
+
+  <script src="http://js.arcgis.com/3.11/"></script>
+
+  <script data-dojo-config="async: 1, dojoBlankHtmlUrl: '/path/to/blank.html'"
+  src="//ajax.googleapis.com/ajax/libs/dojo/1.9.4/dojo/dojo.js"></script>
+
+  <script>
+    var dojoConfig = { 
+      paths: {
+        //modules: location.pathname.replace(/\/[^/]+$/, "") + "/js"
+        modules: "/js"
+      }
+    };
+  </script>
+
+  <script>
+    var map;
+    require([
+      "esri/map", "esri/layers/FeatureLayer", "esri/dijit/Legend",
+      "dojo/_base/array", "dojo/parser",
+      "dijit/layout/BorderContainer", "dijit/layout/ContentPane", 
+      "dijit/layout/AccordionContainer", "dojo/domReady!", "esri/layers/ArcGISImageServiceLayer", "esri/layers/ImageServiceParameters",
+      "esri/layers/ArcGISTiledMapServiceLayer", "esri/SpatialReference",
+      "modules/FLV"
+      ], function(
+        Map, FeatureLayer, Legend,
+        arrayUtils, parser, ArcGISImageServiceLayer, 
+        ImageServiceParameters, Tiled,
+        SpatialReference,
+        FLV
+        ) {
+        parser.parse();
+
+        map = new esri.Map("map");
+
+        var params = new esri.layers.ImageServiceParameters();
+        params.noData = 0;
+
+        var imageServiceLayer = new esri.layers.ArcGISImageServiceLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/OlaryImages/OlaryGrand/ImageServer", {
+          imageServiceParameters: params,
+          opacity: 0.75
+        });
+
+        map.addLayer(imageServiceLayer);
+
+        var streams_olary = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/10", {
+          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+          outFields:["*"]
+        });
+
+
+      //var obj = new FeatureLayerVariables();
+      //var streams_olary2 = obj.streams_olary;
+
+      var streams_teetulpa = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/5"
+        , {
+          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+          outFields: ["*"]
+        });
+
+      var roads = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/4"
+        , {
+          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+          outFields: ["*"]
+        });
+
+      var railways = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/3"
+        , {
+          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+          outFields: ["*"]
+        });
+
+      var surveyareas = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/17"
+        , {
+          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+          outFields: ["*"]
+        });
+
+      var area4 = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/11"
+        , {
+          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+          outFields: ["*"]
+        });
+
+      //add the legend
+      map.on("layers-add-result", function (evt) {
+        var layerInfo = arrayUtils.map(evt.layers, function (layer, index) {
+          return {layer:layer.layer, title:layer.layer.name};
+        });
+        if (layerInfo.length > 0) {
+          var legendDijit = new esri.dijit.Legend({
+            map: map,
+            layerInfos: layerInfo
+          }, "legendDiv");
+          legendDijit.startup();
+        }
+      });
+
+      map.addLayers([streams_olary, 
+        streams_teetulpa, 
+        roads, 
+        railways,
+        surveyareas,
+        area4]);  //Original is map.addLayers
+    });
+
+  </script>
+</head>
+
+<body class="claro">
+<!--[if IE 7]>
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+<![endif]-->
+<div id="content"
+data-dojo-type="dijit/layout/BorderContainer"
+data-dojo-props="design: 'headline', gutters:true"
+style="width:100%;
+height: 100%;
+margin: 0;
+">
+
+<div id="rightPane"
+data-dojo-type="dijit/layout/ContentPane"
+data-dojo-props="region: 'right'">
+
+<div data-dojo-type="dijit/layout/AccordionContainer">
+  <div data-dojo-type="dijit/layout/ContentPane" id="legendPane"
+  data-dojo-props="title:'Legend', selected:true">
+  <div id="legendDiv"></div>
+</div>
+<div data-dojo-type="dijit/layout/ContentPane"
+data-dojo-props="title:'Functions'">
+Functions are being contructed on-demand
+</div>
+</div>
+</div>
+<div id="map"
+data-dojo-type="dijit/layout/ContentPane"
+data-dojo-props="region:'center'"
+style="overflow:hidden;
+">
+</div>
+</div>
+</body>
+
+</html>
