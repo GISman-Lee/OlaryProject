@@ -26,35 +26,43 @@
     }
   </style>
 
-  <script src="http://js.arcgis.com/3.11/"></script>
-
-  <script data-dojo-config="async: 1, dojoBlankHtmlUrl: '/path/to/blank.html'"
-  src="//ajax.googleapis.com/ajax/libs/dojo/1.9.4/dojo/dojo.js"></script>
-
   <script>
-    var dojoConfig = { 
+    var dojoConfig = {
       paths: {
-        //modules: location.pathname.replace(/\/[^/]+$/, "") + "/js"
-        modules: "/js"
+        parseOnLoad: true,
+        modules: location.pathname.replace(/\/[^/]+$/, "") + "/js"
       }
     };
   </script>
 
+  <script src="http://js.arcgis.com/3.11/"></script>
+
   <script>
     var map;
     require([
-      "esri/map", "esri/layers/FeatureLayer", "esri/dijit/Legend",
-      "dojo/_base/array", "dojo/parser",
-      "dijit/layout/BorderContainer", "dijit/layout/ContentPane", 
-      "dijit/layout/AccordionContainer", "dojo/domReady!", "esri/layers/ArcGISImageServiceLayer", "esri/layers/ImageServiceParameters",
-      "esri/layers/ArcGISTiledMapServiceLayer", "esri/SpatialReference",
-      "modules/FLV"
+      "esri/map",
+      "esri/layers/FeatureLayer",
+      "esri/dijit/Legend",
+      "dojo/_base/array",
+      "dojo/parser",
+      "esri/layers/ArcGISImageServiceLayer",
+      "esri/layers/ImageServiceParameters",
+      "esri/SpatialReference",
+      "modules/FeatureLayerElements",
+      "dijit/layout/BorderContainer",
+      "dijit/layout/ContentPane",
+      "dijit/layout/AccordionContainer",
+      "dojo/domReady!"
       ], function(
-        Map, FeatureLayer, Legend,
-        arrayUtils, parser, ArcGISImageServiceLayer, 
-        ImageServiceParameters, Tiled,
+        Map,
+        FeatureLayer,
+        Legend,
+        arrayUtils,
+        parser,
+        ArcGISImageServiceLayer,
+        ImageServiceParameters,
         SpatialReference,
-        FLV
+        FeatureLayerElements
         ) {
         parser.parse();
 
@@ -70,45 +78,6 @@
 
         map.addLayer(imageServiceLayer);
 
-        var streams_olary = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/10", {
-          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
-          outFields:["*"]
-        });
-
-
-      //var obj = new FeatureLayerVariables();
-      //var streams_olary2 = obj.streams_olary;
-
-      var streams_teetulpa = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/5"
-        , {
-          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
-          outFields: ["*"]
-        });
-
-      var roads = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/4"
-        , {
-          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
-          outFields: ["*"]
-        });
-
-      var railways = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/3"
-        , {
-          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
-          outFields: ["*"]
-        });
-
-      var surveyareas = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/17"
-        , {
-          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
-          outFields: ["*"]
-        });
-
-      var area4 = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/11"
-        , {
-          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
-          outFields: ["*"]
-        });
-
       //add the legend
       map.on("layers-add-result", function (evt) {
         var layerInfo = arrayUtils.map(evt.layers, function (layer, index) {
@@ -123,15 +92,19 @@
         }
       });
 
-      map.addLayers([streams_olary, 
-        streams_teetulpa, 
-        roads, 
-        railways,
-        surveyareas,
-        area4]);  //Original is map.addLayers
+      var featurelayerelements = new FeatureLayerElements();
+
+      map.addLayers([
+        featurelayerelements.streams_olary,
+        featurelayerelements.streams_teetulpa,
+        featurelayerelements.roads,
+        featurelayerelements.railways,
+        featurelayerelements.surveyareas,
+        featurelayerelements.area4
+        ]);  //Original is map.addLayers
     });
 
-  </script>
+</script>
 </head>
 
 <body class="claro">
