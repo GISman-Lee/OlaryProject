@@ -4,7 +4,6 @@ define(["dojo/_base/declare",
 	function(declare, arrayUtils, FeatureLayer) {
 	return declare(null, {
 
-		featureArray = [streams_olary, streams_teetulpa, raods, railways, surveyareas, area4, track_area4],
 		streams_olary: null,
 		streams_teetulpa: null,
 		roads: null,
