@@ -1,12 +1,17 @@
-define(["dojo/_base/declare", "esri/request", "esri/layers/FeatureLayer"], function(declare, esriRequest, FeatureLayer) {
+define(["dojo/_base/declare",
+	"dojo/_base/array",
+	"esri/layers/FeatureLayer"],
+	function(declare, arrayUtils, FeatureLayer) {
 	return declare(null, {
 
+		featureArray = [streams_olary, streams_teetulpa, raods, railways, surveyareas, area4, track_area4],
 		streams_olary: null,
 		streams_teetulpa: null,
 		roads: null,
 		railways: null,
 		surveyareas: null,
 		area4: null,
+		track_area4: null,
 
 		constructor: function(options){
 			this.streams_olary = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/Olary/MapServer/10", {
@@ -43,11 +48,13 @@ define(["dojo/_base/declare", "esri/request", "esri/layers/FeatureLayer"], funct
 					mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
 					outFields: ["*"]
 				});
+
+			this.track_area4 = new esri.layers.FeatureLayer("http://arcgis-olary-789983489.ap-southeast-2.elb.amazonaws.com/arcgis/rest/services/OlaryFeatures/Olary/MapServer/1"
+				, {
+					mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+					outFields: ["*"]
+				});
 		},
-
-		getStreamsOlary: function(){
-
-		}
 
 	});
 });

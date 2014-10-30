@@ -49,6 +49,7 @@
       "esri/layers/ImageServiceParameters",
       "esri/SpatialReference",
       "modules/FeatureLayerElements",
+      "modules/LabelLayer",
       "dijit/layout/BorderContainer",
       "dijit/layout/ContentPane",
       "dijit/layout/AccordionContainer",
@@ -62,7 +63,8 @@
         ArcGISImageServiceLayer,
         ImageServiceParameters,
         SpatialReference,
-        FeatureLayerElements
+        FeatureLayerElements,
+        LabelLayer
         ) {
         parser.parse();
 
@@ -94,14 +96,30 @@
 
       var featurelayerelements = new FeatureLayerElements();
 
+      var labelLayer = new LabelLayer();
+      var label1 = labelLayer.createLabel({
+        "labelid" : "surveyareas_id",
+        "featurelayer" : featurelayerelements.surveyareas,
+        "labelfield" : "Priority"
+      });
+      var label2 = labelLayer.createLabel({
+        "labelid" : "area4_id",
+        "featurelayer" : featurelayerelements.area4,
+        "labelfield" : "Name"
+      });
+
       map.addLayers([
         featurelayerelements.streams_olary,
         featurelayerelements.streams_teetulpa,
         featurelayerelements.roads,
         featurelayerelements.railways,
         featurelayerelements.surveyareas,
-        featurelayerelements.area4
-        ]);  //Original is map.addLayers
+        featurelayerelements.area4,
+        featurelayerelements.track_area4
+        ]);
+
+      map.addLayer(label1);
+      map.addLayer(label2);
     });
 
 </script>
