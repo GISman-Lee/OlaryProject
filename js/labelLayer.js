@@ -10,7 +10,6 @@ define(["dojo/_base/declare",
 		constructor: function(){
 			var LabelColor = new Color("#666");
 			var LabelText = new TextSymbol().setColor(LabelColor);
-			//LabelText.font.setSize("14pt");
 			LabelText.font.setFamily("arial");
 			this.LabelRenderer = new SimpleRenderer(LabelText);
 		},
